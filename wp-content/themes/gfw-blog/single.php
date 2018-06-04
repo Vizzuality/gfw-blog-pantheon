@@ -1,41 +1,37 @@
 <?php
 /**
- * The Template for displaying all single posts.
- *
- * @package GFW blog
+ * @package WordPress
+ * @subpackage HTML5_Boilerplate
  */
-
-$localhost = (substr($_SERVER['REMOTE_ADDR'], 0, 4) == '127.' || $_SERVER['REMOTE_ADDR'] == '::1');
-$staging = ($_SERVER['REMOTE_ADDR'] == 'http://wp-wri-staging.herokuapp.com') ? true : false;
-
-if (!$localhost && $staging) {
-  if ( ! $_COOKIE['accepted_v4'] ) {
-    wp_redirect( 'http://www.globalforestwatch.org/accept_terms?return_to=' . home_url(add_query_arg(array(), $wp->request)) );
-    exit;
-  }    
-}
 
 get_header(); ?>
 
-  <div id="primary" class="content-area">
-    <main id="main" class="site-main" role="main">
+<div id="main" role="main">
 
-    <?php while ( have_posts() ) : the_post(); ?>
+<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
-      <?php get_template_part( 'content', 'single' ); ?>
-
-      <?php gfw_blog_post_nav(); ?>
-
-      <?php
-        // If comments are open or we have at least one comment, load up the comment template
-        // if ( comments_open() || '0' != get_comments_number() ) :
-        //  comments_template();
-        // endif;
-      ?>
-
-      <div id="comments" class="comments-area">
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
+  <article <?php post_class() ?> id="post-<?php the_ID(); ?>">
+    <header>
+    </header>
+    <?php the_content('Read the rest of this entry &raquo;'); ?>
+    <?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
+    
+    <div class="share_buttons">
+      <div id="fb-root"></div>
+      <a href="http://twitter.com/share" target="_blank" class="twitter-share-button" data-url="<?php the_permalink(); ?>" data-text="Global Forest Watch">Tweet</a>
+      <div class="g-plusone" data-size="medium" data-href="<?php the_permalink(); ?>"></div>
+      <div class="fb-like" data-href="<?php the_permalink(); ?>" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+    </div>
+    <footer>
+      <?php the_tags( '<p>Tags: ', ', ', '</p>'); ?>
+    <nav>
+      <div><?php previous_post_link('&laquo; %link') ?></div>
+      <div><?php next_post_link('%link &raquo;') ?></div>
+    </nav>
+    <hr>
+        <div id="comments" class="comments-area">
+          <div id="disqus_thread"></div>
+          <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'gfw20'; // required: replace example with your forum shortname
 
@@ -48,10 +44,18 @@ get_header(); ?>
         </script>
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
       </div>
-    <?php endwhile; // end of the loop. ?>
 
-    </main><!-- #main -->
-  </div><!-- #primary -->
+      <?php edit_post_link('Edit this entry','','.'); ?>
+      </p>
+    </footer>
+  </article>
 
-<?#php get_sidebar(); ?>
+<?php endwhile; else: ?>
+
+  <p>Sorry, no posts matched your criteria.</p>
+
+<?php endif; ?>
+
+</div>
+<?php get_sidebar(); ?>
 <?php get_footer(); ?>

@@ -1,74 +1,103 @@
 <?php
 /**
- * The template for displaying Comments.
- *
- * The area of the page that contains both current comments
- * and the comment form. The actual display of comments is
- * handled by a callback to gfw_blog_comment() which is
- * located in the inc/template-tags.php file.
- *
- * @package GFW blog
+ * @package WordPress
+ * @subpackage HTML5_Boilerplate
  */
 
-/*
- * If the current post is protected by a password and
- * the visitor has not yet entered the password we will
- * return early without loading the comments.
- */
-if ( post_password_required() ) {
-	return;
-}
+// Do not delete these lines
+  if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
+    die ('Please do not load this page directly. Thanks!');
+
+  if ( post_password_required() ) { ?>
+    <p class="nocomments">This post is password protected. Enter the password to view comments.</p>
+  <?php
+    return;
+  }
 ?>
 
-<div id="comments" class="comments-area">
+<!-- You can start editing here. -->
 
-	<?php // You can start editing here -- including this comment! ?>
+<?php if ( have_comments() ) : ?>
+  <h3 id="comments"><?php comments_number('No Responses', 'One Response', '% Responses' );?> to &#8220;<?php the_title(); ?>&#8221;</h3>
 
-	<?php if ( have_comments() ) : ?>
-		<h2 class="comments-title">
-			<?php
-				printf( _nx( 'One thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', get_comments_number(), 'comments title', 'gfw-blog' ),
-					number_format_i18n( get_comments_number() ), '<span>' . get_the_title() . '</span>' );
-			?>
-		</h2>
+  <nav>
+    <div><?php previous_comments_link() ?></div>
+    <div><?php next_comments_link() ?></div>
+  </nav>
 
-		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>
-		<nav id="comment-nav-above" class="comment-navigation" role="navigation">
-			<h1 class="screen-reader-text"><?php _e( 'Comment navigation', 'gfw-blog' ); ?></h1>
-			<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'gfw-blog' ) ); ?></div>
-			<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'gfw-blog' ) ); ?></div>
-		</nav><!-- #comment-nav-above -->
-		<?php endif; // check for comment navigation ?>
+  <ol class="commentlist">
+  <?php wp_list_comments('type=comment&callback=mytheme_comment'); ?>
+  </ol>
 
-		<ol class="comment-list">
-			<?php
-				/* Loop through and list the comments. Tell wp_list_comments()
-				 * to use gfw_blog_comment() to format the comments.
-				 * If you want to override this in a child theme, then you can
-				 * define gfw_blog_comment() and that will be used instead.
-				 * See gfw_blog_comment() in inc/template-tags.php for more.
-				 */
-				wp_list_comments( array( 'callback' => 'gfw_blog_comment' ) );
-			?>
-		</ol><!-- .comment-list -->
+  <nav>
+    <div><?php previous_comments_link() ?></div>
+    <div><?php next_comments_link() ?></div>
+  </nav>
+ <?php else : // this is displayed if there are no comments so far ?>
 
-		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>
-		<nav id="comment-nav-below" class="comment-navigation" role="navigation">
-			<h1 class="screen-reader-text"><?php _e( 'Comment navigation', 'gfw-blog' ); ?></h1>
-			<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'gfw-blog' ) ); ?></div>
-			<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'gfw-blog' ) ); ?></div>
-		</nav><!-- #comment-nav-below -->
-		<?php endif; // check for comment navigation ?>
+  <?php if ( comments_open() ) : ?>
+    <!-- If comments are open, but there are no comments. -->
 
-	<?php endif; // have_comments() ?>
+   <?php else : // comments are closed ?>
+    <!-- If comments are closed. -->
+    <p class="nocomments">Comments are closed.</p>
 
-	<?php
-		// If comments are closed and there are comments, let's leave a little note, shall we?
-		if ( ! comments_open() && '0' != get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) :
-	?>
-		<p class="no-comments"><?php _e( 'Comments are closed.', 'gfw-blog' ); ?></p>
-	<?php endif; ?>
+  <?php endif; ?>
+<?php endif; ?>
 
-	<?php comment_form(); ?>
 
-</div><!-- #comments -->
+<?php if ( comments_open() ) : ?>
+
+<section id="respond">
+
+  <h3><?php comment_form_title( 'Leave a Reply', 'Leave a Reply to %s' ); ?></h3>
+
+  <div class="cancel-comment-reply">
+    <small><?php cancel_comment_reply_link(); ?></small>
+  </div>
+
+  <?php if ( get_option('comment_registration') && !is_user_logged_in() ) : ?>
+  <p>You must be <a href="<?php echo wp_login_url( get_permalink() ); ?>">logged in</a> to post a comment.</p>
+  <?php else : ?>
+
+  <form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
+
+  <?php if ( is_user_logged_in() ) : ?>
+
+  <p>Logged in as <a href="<?php echo get_option('siteurl'); ?>/wp-admin/profile.php"><?php echo $user_identity; ?></a>. <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="Log out of this account">Log out &raquo;</a></p>
+
+  <?php else : ?>
+
+  <p>
+    <label for="author">Name <?php if ($req) echo "(required)"; ?></label>
+    <input type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" size="22" tabindex="1" <?php if ($req) echo "aria-required='true'"; ?> />
+  </p>
+
+  <p>
+    <label for="email"><small>Mail (will not be published) <?php if ($req) echo "(required)"; ?></small></label>
+    <input type="email" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" size="22" tabindex="2" <?php if ($req) echo "aria-required='true'"; ?> />
+  </p>
+
+  <p>
+    <label for="url">Website</label>
+    <input type="url" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" size="22" tabindex="3" />
+  </p>
+
+  <?php endif; ?>
+
+  <p id="allowed_tags"><strong>XHTML:</strong> You can use these tags: <code><?php echo allowed_tags(); ?></code></p>
+
+  <p><textarea name="comment" id="comment" cols="34" rows="10" tabindex="4"></textarea></p>
+
+  <p>
+    <input name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" />
+    <?php comment_id_fields(); ?>
+  </p>
+  <?php do_action('comment_form', $post->ID); ?>
+
+  </form>
+
+  <?php endif; // If registration required and not logged in ?>
+</section>
+
+<?php endif; // if you delete this the sky will fall on your head ?>
