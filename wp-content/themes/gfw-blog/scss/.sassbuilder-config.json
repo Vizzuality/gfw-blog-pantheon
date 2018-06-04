@@ -1,0 +1,10 @@
+{
+	"output_path": "/wp-content/themes/gfw-blog/scss/style",
+	"options": {
+		"cache":         true,
+		"debug":         true,
+		"line-comments": true,
+		"line-numbers":  true,
+		"style":         "nested"
+	}
+}
