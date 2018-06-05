@@ -41,7 +41,7 @@ get_header(); ?>
           <?php if (has_post_thumbnail( $post->ID ) ): ?>
             <?php $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'single-post-thumbnail' ); ?>
           <?php endif; ?>
-            <img src="<? echo $image[0];?>">
+            <img src="<?php echo $image[0];?>">
 
           <header>
             <h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>

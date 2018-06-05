@@ -237,8 +237,11 @@ a {
     color: #555555;
     font-size: 12px;
 }
-#sidebar .feed svg {
+#sidebar .feed img {
     margin: 0 0 0 5px;
+    height: 15px;
+    border-radius: 0;
+    float: none;
 }
 #sidebar .feed path {
     fill: #97bd3d;

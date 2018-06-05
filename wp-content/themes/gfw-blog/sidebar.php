@@ -7,7 +7,7 @@
 <aside id="sidebar">
 
   <section class="feed">
-    <a href="<?php bloginfo('rss2_url'); ?>">Subscribe to our RSS <?php echo file_get_contents(get_template_directory_uri()."/img/rss.svg"); ?></a>
+    <a href="<?php bloginfo('rss2_url'); ?>">Subscribe to our RSS <img src="<?php echo get_template_directory_uri()."/img/rss.svg"; ?>" width="15" height="15"/></a>
   </section>
 
   <section>
@@ -23,7 +23,7 @@
       $FeaturedUserPro = get_post_meta($featuredUser->ID, 'FeaturedUserPro',true);
 
     ?>
-    <span class="title">featured gfw user</span> <?php echo file_get_contents("kiwi.svg"); ?>
+    <span class="title">featured gfw user</span>
     <div class="f-user">
       <img src="<?php echo $FeaturedUserPic; ?>">
       <span class="name"><a href="<?php echo $FeaturedUserUrl; ?>" target="_blank"><?php echo $FeaturedUserName; ?></a></span>
