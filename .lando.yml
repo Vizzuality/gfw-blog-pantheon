@@ -1,0 +1,6 @@
+name: global-forest-watch-blog
+recipe: pantheon
+config:
+  framework: wordpress
+  site: global-forest-watch-blog
+  id: ea7fb5f4-ea1e-4261-8e4f-53f7466192c7
