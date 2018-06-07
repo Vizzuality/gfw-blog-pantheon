@@ -1,102 +1,24 @@
-# WordPress Heroku
+# GFW Blog
 
-This project is a template for installing and running [WordPress](http://wordpress.org/) on [Heroku](http://www.heroku.com/). The repository comes bundled with [PostgreSQL for WordPress](http://wordpress.org/extend/plugins/postgresql-for-wordpress/) and [WP Read-Only](http://wordpress.org/extend/plugins/wpro/).
+The application is a wordpress installation running on Pantheon hosting service.
 
 ## Installation
 
-Clone the repository from Github
+Clone the repo and use one of the following tools to get the project running locally:
 
-    $ git clone git://github.com/mhoofman/wordpress-heroku.git
+### Lando
 
-With the [Heroku gem](http://devcenter.heroku.com/articles/heroku-command), create your app
+[Lando](https://github.com/lando/lando) is an open source library for spinning up services or applications without the hassle, and it integrates brilliantly with Pantheon. To develop using lando you will need to be added to the Pantheon project. Please contact someone at Vizzuality before proceeding, and add your public key to your account. Once you have access you can run
 
-    $ cd wordpress-heroku
-    $ heroku create
-    Creating strange-turtle-1234... done, stack is cedar
-    http://strange-turtle-1234.herokuapp.com/ | git@heroku.com:strange-turtle-1234.git
-    Git remote heroku added
+    $ lando start
 
-Add a database to your app
+This will build a wordpress docker install and start the server. You will still be missing the database and assets folder. You can pull these with
 
-    $ heroku addons:add heroku-postgresql:dev
-    Adding heroku-postgresql:dev to strange-turtle-1234... done, v2 (free)
-    Attached as HEROKU_POSTGRESQL_COLOR
-    Database has been created and is available
-    Use `heroku addons:docs heroku-postgresql:dev` to view documentation
+    $ lando pull
+    
+This will prompt you for what items you want to pull (code, database, files). As you already have the code, just select database and files. Each time you will be prompted for an environment (dev should be sufficient). Note, lando also allows you to push to Pantheon your changes. You can do this when you want to deploy and changes to the dev environment.
 
-Promote the database (replace COLOR with the color name from the above output)
+### Local server
 
-    $ heroku pg:promote HEROKU_POSTGRESQL_COLOR
-    Promoting HEROKU_POSTGRESQL_COLOR to DATABASE_URL... done
+If you dont want to use Lando, or are developing without access to Pantheon, you can simple create your own php server with mySQL running. We recommend using [MAMP](https://www.mamp.info/en/)  to set this up. As for database and files, you can create demo content yourself through the wordpress admin fairly painlessly. 
 
-Create a new branch for any configuration/setup changes needed
-
-    $ git checkout -b production
-
-Store unique keys and salts in Heroku environment variables. Wordpress can provide random values [here](https://api.wordpress.org/secret-key/1.1/salt/).
-
-    heroku config:set AUTH_KEY='put your unique phrase here' \
-      SECURE_AUTH_KEY='put your unique phrase here' \
-      LOGGED_IN_KEY='put your unique phrase here' \
-      NONCE_KEY='put your unique phrase here' \
-      AUTH_SALT='put your unique phrase here' \
-      SECURE_AUTH_SALT='put your unique phrase here' \
-      LOGGED_IN_SALT='put your unique phrase here' \
-      NONCE_SALT='put your unique phrase here' \
-
-Deploy to Heroku
-
-    $ git push heroku production:master
-    -----> Heroku receiving push
-    -----> PHP app detected
-    -----> Bundling Apache v2.2.22
-    -----> Bundling PHP v5.3.10
-    -----> Discovering process types
-           Procfile declares types -> (none)
-           Default types for PHP   -> web
-    -----> Compiled slug size is 13.8MB
-    -----> Launcing... done, v5
-           http://strange-turtle-1234.herokuapp.com deployed to Heroku
-
-    To git@heroku:strange-turtle-1234.git
-      * [new branch]    production -> master
-
-After deployment WordPress has a few more steps to setup and thats it!
-
-## Usage
-
-Because a file cannot be written to Heroku's file system, updating and installing plugins or themes should be done locally and then pushed to Heroku.
-
-## Updating
-
-Updating your WordPress version is just a matter of merging the updates into
-the branch created from the installation.
-
-    $ git pull # Get the latest
-
-Using the same branch name from our installation:
-
-    $ git checkout production
-    $ git merge master # Merge latest
-    $ git push heroku production:master
-
-WordPress needs to update the database. After push, navigate to:
-
-    http://your-app-url.herokuapp.com/wp-admin
-
-WordPress will prompt for updating the database. After that you'll be good
-to go.
-
-## Develop
-
-To easy theme develop install [docker](https://www.docker.com/) and launch `docker-compose up` in the root of the folder
-It will set up a fully working wordpress with the theme added.
-
-## Wiki
-
-* [Custom Domains](https://github.com/mhoofman/wordpress-heroku/wiki/Custom-Domains)
-* [Media Uploads](https://github.com/mhoofman/wordpress-heroku/wiki/Media-Uploads)
-* [Postgres Database Syncing](https://github.com/mhoofman/wordpress-heroku/wiki/Postgres-Database-Syncing)
-* [Setting Up a Local Environment on Linux (Apache)](https://github.com/mhoofman/wordpress-heroku/wiki/Setting-Up-a-Local-Environment-on-Linux-(Apache\))
-* [Setting Up a Local Environment on Mac OS X](https://github.com/mhoofman/wordpress-heroku/wiki/Setting-Up-a-Local-Environment-on-Mac-OS-X)
-* [More...](https://github.com/mhoofman/wordpress-heroku/wiki)
