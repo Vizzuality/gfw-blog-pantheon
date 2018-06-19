@@ -149,36 +149,38 @@ if ( ! defined( 'WP_DEBUG' ) ) {
 }
 
 if (isset($_ENV['PANTHEON_ENVIRONMENT']) && php_sapi_name() != 'cli') {
-    // Redirect to https://$primary_domain in the Live environment
-    if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
-      /** Replace www.example.com with your registered domain name */
-      $primary_domain = 'blog.globalforestwatch.org';
-    }
-    else {
-      // Redirect to HTTPS on every Pantheon environment.
-      $primary_domain = $_SERVER['HTTP_HOST'];
-    }
-  
-    if ($_SERVER['HTTP_HOST'] != $primary_domain
-        || !isset($_SERVER['HTTP_USER_AGENT_HTTPS'])
-        || $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON' ) {
-  
-      # Name transaction "redirect" in New Relic for improved reporting (optional)
-      if (extension_loaded('newrelic')) {
-        newrelic_name_transaction("redirect");
-      }
-  
-      header('HTTP/1.0 301 Moved Permanently');
-      header('Location: https://'. $primary_domain . $_SERVER['REQUEST_URI']);
-      exit();
-    }
+  // Redirect to https://$primary_domain in the Live environment
+  if ($_ENV['PANTHEON_ENVIRONMENT'] === 'live') {
+    /** Replace www.example.com with your registered domain name */
+    $primary_domain = 'blog.globalforestwatch.org';
+  }
+  else {
+    // Redirect to HTTPS on every Pantheon environment.
+    $primary_domain = $_SERVER['HTTP_HOST'];
   }
 
+  if ($_SERVER['HTTP_HOST'] != $primary_domain
+      || !isset($_SERVER['HTTP_USER_AGENT_HTTPS'])
+      || $_SERVER['HTTP_USER_AGENT_HTTPS'] != 'ON' ) {
+
+    # Name transaction "redirect" in New Relic for improved reporting (optional)
+    if (extension_loaded('newrelic')) {
+      newrelic_name_transaction("redirect");
+    }
+
+    header('HTTP/1.0 301 Moved Permanently');
+    header('Location: https://'. $primary_domain . $_SERVER['REQUEST_URI']);
+    exit();
+  }
+}
+
+if (strpos($_SERVER['REQUEST_URI'], '.html') !== false) {
+  header('HTTP/1.0 301 Moved Permanently');
+  header('Location: https://'. $_SERVER['HTTP_HOST'] . str_replace('.html', '', $_SERVER['REQUEST_URI']));
+  exit();
+}
 
 /* That's all, stop editing! Happy Pressing. */
-
-
-
 
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
