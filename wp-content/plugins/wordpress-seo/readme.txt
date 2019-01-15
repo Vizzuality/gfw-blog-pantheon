@@ -4,9 +4,9 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Google Search Console, Content analysis, Readability
-Requires at least: 4.8
-Tested up to: 4.9.6
-Stable tag: 7.6.1
+Requires at least: 4.9
+Tested up to: 5.0.3
+Stable tag: 9.4
 Requires PHP: 5.2.4
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -34,8 +34,8 @@ Yoast SEO does everything in its power to please both visitors and search engine
 
 * Content & SEO analysis: Invaluable tools to write SEO-friendly texts.
 * The snippet preview shows you how your post or page will look in the search results - even on mobile. Yoast SEO Premium even has social media previews!
-* **[Premium]** The Insights tool shows you what your text focuses on so you can keep your article in line with your keywords.
-* **[Premium]** Multiple focus keywords: Optimize your article for synonyms and related keywords.
+* **[Premium]** The Insights tool shows you what your text focuses on so you can keep your article in line with your keyphrases.
+* **[Premium]** Synonyms & related keyphrases: Optimize your article for synonyms and related keyphrases.
 * **[Premium]** Automatic internal linking suggestions: write your article and get automatic suggested posts to link to.
 
 #### Keep your site in perfect shape
@@ -52,7 +52,7 @@ Yoast SEO does everything in its power to please both visitors and search engine
 
 The Yoast team does not always provide active support for the Yoast SEO plugin on the WordPress.org forums, as we prioritize our email support. One-on-one email support is available to people who [bought Yoast SEO Premium](https://yoa.st/1v8) only.
 
-Note that the [Yoast SEO Premium](https://yoa.st/1v8) also has several extra features too, including the option to have multiple focus keywords, internal linking suggestions, cornerstone content checks and a redirect manager, so it is well worth your investment!
+Note that the [Yoast SEO Premium](https://yoa.st/1v8) also has several extra features too, including the option to have synonyms and related keyphrases, internal linking suggestions, cornerstone content checks and a redirect manager, so it is well worth your investment!
 
 You should also check out the [Yoast Local SEO](https://yoa.st/1uu), [Yoast News SEO](https://yoa.st/1uv) and [Yoast Video SEO](https://yoa.st/1uw) extensions to Yoast SEO. They work with the free version of Yoast SEO already, and these premium extensions of course come with support too.
 
@@ -106,58 +106,75 @@ You'll find answers to many of your questions on [kb.yoast.com](https://yoa.st/1
 
 == Changelog ==
 
-= 7.6.1 =
-Release Date: June 7th, 2018
+= 9.4.0 =
+Release Date: January 8th, 2019
 
-Bugfixes:
-* Fixes a bug where a JavaScript error was thrown on the post-edit page when certain plugins are active.
-* Fixes a bug where stylesheet definitions would impact form fields of metaboxes on the post-edit pages. The definitions have been contained in a Yoast-selector.
+Content analysis recalibration (beta):
 
-= 7.6.0 =
-Release Date: June 5th, 2018
+* Adds a toggle feature for subscribing to the recalibration beta under SEO -> General -> Features.
+* When the recalibration feature is enabled:
+  * The single title assessment is added. This assessment makes sure that you don't use superfluous H1s in your text.
+  * Assessments changes:
+    * Keyphrase density: changes scoring schema to account for the length of the keyphrase and changes feedback strings so that we give feedback about the number of occurrences rather than a percentage.
+    * Outbound links assessment: changes the scoring schema so that red bullet instead of an orange bullet is shown when you have no outbound links.
+    * Image alt attributes: if there are at least 5 images, checks whether the alt tags contain the keyphrase or synoynyms in 30-70% of all images. If there are less than 5 images, 1 image with the keyphrase or synonym in the alt tag is still scored as good.
+    * Keyphrase in title: function words preceding the exact match keyphrase are ignored when determining the position of the keyphrase in the title.
+    * Keyphrase length: makes the scoring scheme less strict for languages that don't have function word support, so that for these languages keyphrases with 1-6 words are scored as green, 7-9 as orange, and more than 9 as red.
+    * Keyphrase in subheading: only takes H2 and H3 level subheadings into account and changes the scoring schema so that 30%-75% of these subheadings need to include the keyphrase or its synonyms. In languages without function word support, a match is only counted if all the words from the keyphrase/synonym appear in the subheading.
+    * Text length: on taxonomy pages, the recommended minimum text length is increased from 150 to 250 words.
+  * Assessment removals:
+    * The assessment checking the length or your URL.
+    * The assessment checking whether your URL contains stopwords.
 
 Enhancements:
-* Adds Flesch Reading Ease for Russian.
-* Adds Catalan transition words.
-* Adds a tab to the Help Center on posts, pages, terms and custom post types which explains which template variables can be used in the Snippet Preview.
+
+* Improve accessibility of the analysis results.
+* Improve accessibility of the Title Separator setting.
+* Adds a new filter for adjacent-rel links: `wpseo_adjacent_rel_url`.
 
 Bugfixes:
-* Fixes a bug where sequences of symbols which do not contain a single letter or digit were considered as valid keywords.
-* Fixes a bug where Flesch Reading Ease translation strings were not fully translated.
-* Fixes a bug where numbers-only keywords caused the analysis to fail.
-* Fixes a bug where the active keyword in the state wasn't updated whenever changes were made in the keyword field.
-* Fixes a bug where replacevars based on custom fields would throw an error due to a missing ID.
+
+* Fixes a bug where special characters from certain word lists weren't correctly escaped when matched with a regex. This resulted in `eggs` being incorrectly matched as the transition word `e.g.`, for example.
+* Fixes a bug where the search appearance setting for a custom content type named `profile` would have a broken layout.
+* Fixes a bug where pagination elements were not shown in the Genesis theme.
 
 Other:
-* Changes the maximum meta description length from 320 to 156 characters.
-* Fixes typo in $field_defs parameter description for wpseo_metabox_entries filter.
-* Restores the warning for using unsupported replacement variables on the search appearance settings page.
 
-= 7.5.3 =
-Release Date: May 30th, 2018
+* Uses method `is_simple_page` instead of `is_singular` in method robots. Props to: [stodorovic](https://github.com/stodorovic)
+* Adds method `is_woocommerce_active` and check is woocommerce activate before registering hooks. Props to [stodorovic](https://github.com/stodorovic)
+* Adds static variables to "cache" results of functions [`is_shop`](https://docs.woocommerce.com/wc-apidocs/function-is_shop.html) and [`wc_get_page_id`](https://docs.woocommerce.com/wc-apidocs/function-wc_get_page_id.html). Props to [stodorovic](https://github.com/stodorovic)
+* Verifies that variable `post` is an instance of `WP_Post` in `WPSEO_Admin_Bar_Menu ::get_singular_post()`. Props to [@yingles](https://github.com/yingles).
+* Improves strings to be more easily translated. Props to [pedro-mendonca](https://github.com/pedro-mendonca)
+* The browser console now shows more descriptive error messages when something went wrong during analyses in the web worker.
+* Avoids irrelevant warning and error in the WPEngine PHP Compatibility plugin.
 
-* Added hooks and filters to allow our new [search index purge](https://wordpress.org/plugins/yoast-seo-search-index-purge/) plugin to work. You’re encouraged to read [this post about an attachment URL problem](https://yoa.st/2r8) for more info.
-
-= 7.5.1 =
-Release Date: May 16th, 2018
-
-Bugfixes:
-* Fixes a bug where the auto-generating of the slug did not work as expected due to persisting of the post name too agressively.
-
-= 7.5.0 =
-Release Date: May 15th, 2018
+= 9.3.0 =
+Release Date: December 18th, 2018
 
 Enhancements:
-* Adds readability analysis for Russian.
-* Improves accessibility.
+
+* Reapplies the markers in Gutenberg when the content changes to make sure they stay up-to-date.
+* Changes the output of schema preventing unnecessary escaping of forward slashes, only available on sites running PHP 5.4 or higher.
+* Changes the website schema `@id` attribute to include the home URL to be a unique identifier.
+* Adds the page number to the breadcrumbs when an archived page is entered.
+* Removes a redundant Edge-specific CSS fix for the tooltips in the post overview. Props [mkronenfeld](https://github.com/mkronenfeld).
 
 Bugfixes:
-* Fixes a bug where images with specific aspect ratios where removed from OpenGraph consideration. This was causing unexpected results with Facebook sharing. The aspect ratio check has been removed completely.
-* Fixes a bug where sentences ending in multiple sentence marks, exclamation marks or ellipses were treated as multiple sentences.
-* Fixes a bug where attempting to get Yoast SEO options in multi-site, would result in wrong values being returned.
-* Fixes a bug where the sitemap styling could not be loaded when the Site domain differs from the Admin domain.
-* Fixes a bug where the admin bar still used old copy: Dashboard has been renamed to General.
+
+* Fixes a bug where the 'Select primary category' label in the primary taxonomy picker would overlap the 'Add new category' button.
+* Fixes a bug where the cornerstone filter was still visible with the metabox disabled.
+* Fixes a bug where non-functional markers are shown for taxonomy pages.
+* Fixes a bug where the `og:description` tag would remain empty after setting the author description.
+* Fixes a bug where texts in the configuration wizard would overlap each other and break out of the columns in Internet Explorer 11. Props [DrGrimshaw](https://github.com/DrGrimshaw).
+* Fixes a bug where keyphrases weren't recognized in the URL when the words in the URL were separated by underscore characters instead of hyphens.
+* Fixes a bug that caused numbers to be stripped when marking a keyphrase containing a number, e.g. 'Yoast SEO 9.3'.
+* Fixes a bug where the first tab of the metabox would be empty when using WordPress 4.8.x.
+* Fixes a bug where private post types would have a sitemap with their 'private' entries.
+
+Other:
+
+* Implemented performance optimizations in FAQ and How To blocks.
 
 = Earlier versions =
 
-For the changelog of earlier versions, please refer to https://yoa.st/yoast-seo-changelog
+For the changelog of earlier versions, please refer to [the Yoast SEO changelog on yoast.com](https://yoa.st/yoast-seo-changelog)
