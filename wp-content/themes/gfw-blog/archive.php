@@ -9,7 +9,7 @@ get_header(); ?>
     <?php $post = $posts[0]; // Hack. Set $post so that the_date() works. ?>
     <?php /* If this is a category archive */ if (is_category()) { ?>
     <h2 class="pagetitle">
-      Archive for the &#8216;<?php single_cat_title(); ?>&#8217; Category
+      <?php the_archive_description( '<div class="taxonomy-description">', '</div>' ); ?>
       <?php if (in_category( 'stories' )) { ?>
         <a href="http://www.globalforestwatch.org/stories/new" class="add-button">
           <div class="add-button-text">Add your own story</div>
