@@ -464,7 +464,6 @@ h2 a:visited {color: #555;}
     display: flex;
     justify-content: center;
     align-items: center;
-    text-transform: capitalize;
     color: #333;
     opacity: 0.8;
     font-size: 14px;
