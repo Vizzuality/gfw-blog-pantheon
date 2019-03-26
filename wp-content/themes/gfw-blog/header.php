@@ -85,14 +85,13 @@
     </header>
     <nav id="main-sections">
       <ul>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php if (is_home()) echo 'selected' ?>">home</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>places-to-watch/" class="<?php if (is_category() && in_category( 'places-to-watch' )) echo 'selected' ?>">places to watch</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>data/" class="<?php if (is_category() && in_category( 'data-and-research' )) echo 'selected' ?>">data and research</a></li>
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="<?php if (is_home()) echo 'selected' ?>">Home</a></li>
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>data/" class="<?php if (is_category() && in_category( 'data-and-research' )) echo 'selected' ?>">Data and Research</a></li>
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>people/" class="<?php if (is_category() && in_category( 'people' )) echo 'selected' ?>">People</a></li>
         <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>commodities/" class="<?php if (is_category() && in_category( 'commodities' )) echo 'selected' ?>">Commodities</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>fires/" class="<?php if (is_category() && in_category( 'fires' )) echo 'selected' ?>">fires</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>climate/" class="<?php if (is_category() && in_category( 'climate' )) echo 'selected' ?>">climate</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>people/" class="<?php if (is_category() && in_category( 'people' )) echo 'selected' ?>">people</a></li>
-        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>features/" class="<?php if (is_category() && in_category( 'features' )) echo 'selected' ?>">updates</a></li>
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>fires/" class="<?php if (is_category() && in_category( 'fires' )) echo 'selected' ?>">Fires</a></li>
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>climate/" class="<?php if (is_category() && in_category( 'climate' )) echo 'selected' ?>">Climate</a></li>
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>places-to-watch/" class="<?php if (is_category() && in_category( 'places-to-watch' )) echo 'selected' ?>">Places to Watch</a></li>
       </ul>
     </nav>
     <div id="mobile-sidebar">
